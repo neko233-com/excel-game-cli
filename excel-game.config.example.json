@@ -1,0 +1,29 @@
+{
+  "format": "config233",
+  "schema": "auto",
+  "output_dir": "generated",
+  "recursive": true,
+  "workers": 0,
+  "value_mode": "string",
+  "json_shape": "array",
+  "header": {
+    "comment_row": 1,
+    "display_row": 2,
+    "client_row": 3,
+    "type_row": 4,
+    "server_row": 5,
+    "data_start_row": 6,
+    "skip_columns": 1
+  },
+  "formatting": {
+    "normalize": true,
+    "preserve_styles": true,
+    "auto_fit": true,
+    "font_family": "Microsoft YaHei",
+    "font_size": 11,
+    "min_column_width": 10,
+    "max_column_width": 60,
+    "base_row_height": 18,
+    "max_row_height": 120
+  }
+}
