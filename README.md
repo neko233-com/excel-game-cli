@@ -12,14 +12,17 @@
 - Luban 是独立的可选策略，使用 `##var` / `##type` / `##comment` 基础表头，不影响 config233 默认路径。
 - `format` 原地读写工作簿：默认按字符串写回非公式单元格，统一字体/大小，自适应列宽和行高。
 - 改样式时只替换字体字段，尽量保留原有背景色、边框、填充、对齐、数字格式和合并关系。
-- JSON 配置文件驱动，命令行参数可以覆盖配置。
+- JSON 配置文件驱动，命令行参数可以覆盖配置；未指定 `--out` 时只写系统临时目录，不污染项目工作树。
 
 ## 快速开始
 
 ```powershell
 go build -trimpath -ldflags="-s -w" -o bin\excel-game-cli.exe .\cmd\excel-game-cli
 
-# 默认 config233 TSV：generated\ItemConfig.tsv.txt
+# 默认 config233 TSV：写入系统临时目录，路径会打印到 stderr
+.\bin\excel-game-cli.exe convert .\BusinessConfig --recursive
+
+# 需要纳入项目产物时，显式指定目录
 .\bin\excel-game-cli.exe convert .\BusinessConfig --recursive --out .\generated
 
 # JSON / TSV / CSV。默认值仍是字符串
@@ -42,7 +45,7 @@ go build -trimpath -ldflags="-s -w" -o bin\excel-game-cli.exe .\cmd\excel-game-c
 
 ## 配置
 
-运行 `excel-game-cli init` 生成 `excel-game.config.json`。默认配置等价于 `excel-game.config.example.json`。
+运行 `excel-game-cli init` 生成 `excel-game.config.json`。默认配置等价于 `excel-game.config.example.json`。配置中的 `output_dir` 留空时写入系统临时目录；只有显式设置 `output_dir` 或命令行 `--out` 才会在项目目录生成文件。工具不会自动修改项目的 `.gitignore`。
 
 `workers: 0` 表示使用 CPU 数量。`schema: auto` 会先探测 Luban 的 `##var`，否则按 config233 处理。真实项目如有不同表头，只改 `header`，不需要改代码。
 
@@ -52,6 +55,8 @@ go build -trimpath -ldflags="-s -w" -o bin\excel-game-cli.exe .\cmd\excel-game-c
 - `tsv` / `csv`：第一行为字段名，后续为数据；空值保持空字符串。
 - `json`：默认输出对象数组，所有值为 JSON string；`json_shape: map` 时用 `id` 或 `key` 字段做键。
 - `luban`：输出新的 `.xlsx`，用 `##var`、`##type`、`##comment` 三行基础表头。
+
+Release 只发布三个目标：macOS Apple Silicon (`darwin/arm64`)、Windows ARM64 (`windows/arm64`) 和 Windows x86 (`windows/386`)；不发布 Linux 构建。
 
 ## 验证
 

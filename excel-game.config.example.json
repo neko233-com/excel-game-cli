@@ -1,7 +1,7 @@
 {
   "format": "config233",
   "schema": "auto",
-  "output_dir": "generated",
+  "output_dir": "",
   "recursive": true,
   "workers": 0,
   "value_mode": "string",

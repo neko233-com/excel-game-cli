@@ -21,6 +21,14 @@ func ConvertDirectory(input string, cfg Config) error {
 	if len(files) == 0 {
 		return fmt.Errorf("no .xlsx or .xlsm workbooks found in %s", input)
 	}
+	if cfg.OutputDir == "" {
+		temporaryOutput, tempErr := os.MkdirTemp("", "excel-game-cli-")
+		if tempErr != nil {
+			return fmt.Errorf("create temporary output directory: %w", tempErr)
+		}
+		cfg.OutputDir = temporaryOutput
+		fmt.Fprintln(os.Stderr, "temporary output:", temporaryOutput)
+	}
 	inputInfo, statErr := os.Stat(input)
 	if statErr != nil {
 		return statErr

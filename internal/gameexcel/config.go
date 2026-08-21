@@ -62,9 +62,11 @@ type Config struct {
 
 func DefaultConfig() Config {
 	return Config{
-		Format:    string(FormatConfig233),
-		Schema:    string(SchemaAuto),
-		OutputDir: "generated",
+		Format: string(FormatConfig233),
+		Schema: string(SchemaAuto),
+		// Empty means a system temporary directory at runtime. This keeps a
+		// normal game repository clean unless the caller explicitly uses --out.
+		OutputDir: "",
 		Recursive: true,
 		Workers:   0,
 		ValueMode: string(ValueModeString),

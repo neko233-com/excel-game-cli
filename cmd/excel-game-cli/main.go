@@ -99,9 +99,6 @@ func runConvert(args []string) error {
 	if cfg.Format == "" {
 		cfg.Format = string(gameexcel.FormatConfig233)
 	}
-	if cfg.OutputDir == "" {
-		cfg.OutputDir = "generated"
-	}
 	if cfg.ValueMode == "" {
 		cfg.ValueMode = string(gameexcel.ValueModeString)
 	}

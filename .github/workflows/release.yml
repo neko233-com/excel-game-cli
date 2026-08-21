@@ -1,0 +1,31 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - name: Build supported binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -trimpath -ldflags='-s -w' -o dist/excel-game-cli-darwin-arm64 ./cmd/excel-game-cli
+          CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -trimpath -ldflags='-s -w' -o dist/excel-game-cli-windows-arm64.exe ./cmd/excel-game-cli
+          CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -trimpath -ldflags='-s -w' -o dist/excel-game-cli-windows-x86.exe ./cmd/excel-game-cli
+          sha256sum dist/* > dist/SHA256SUMS
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --generate-notes
